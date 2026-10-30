@@ -8,18 +8,26 @@ boards=($(curl -s https://a.4cdn.org/boards.json | awk -f boards.awk))
 
 boardcomment () {
 
-  board=${boards[$RANDOM % ${#boards[@]}]}
+  
 
-  local threads=($(curl -s https://a.4cdn.org/$board/threads.json | awk -f threads.awk))
+  while [ ${#threads[@]} -lt "3" ] 
+  do
+    board=${boards[$RANDOM % ${#boards[@]}]}
 
-  thread=${threads[$RANDOM % ${#threads[@]}]}
+    local threads=($(curl -s https://a.4cdn.org/$board/threads.json | awk -f threads.awk))
+  done
 
-  oldIFS=$IFS
-  IFS="'"
+  while [ ${#comments[@]} -lt "1" ]
+  do
+    thread=${threads[$RANDOM % ${#threads[@]}]}
 
-  local comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | awk -f comments.awk))
+    oldIFS=$IFS
+    IFS="'"
 
-  IFS=$oldIFS
+    local comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | awk -f comments.awk))
+
+    IFS=$oldIFS
+  done
 
   local comment=${comments[$RANDOM % ${#comments[@]}]}
 
