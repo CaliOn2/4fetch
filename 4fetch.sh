@@ -24,7 +24,7 @@ boardcomment () {
     oldIFS=$IFS
     IFS="'"
 
-    local comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | awk -f comments.awk))
+    local comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | sed -f prefilter.sed | awk -f comments.awk))
 
     IFS=$oldIFS
   done
