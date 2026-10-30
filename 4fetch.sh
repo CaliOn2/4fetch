@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/sh
+
+# relies on bash
 
 boards=($(curl -s https://a.4cdn.org/boards.json | awk -f boards.awk))
 
