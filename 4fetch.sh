@@ -39,7 +39,7 @@ loop=false
 
 verbose=false
 
-while getopts 'vlh:' option; do
+while getopts 'vlhb:' option; do
   case $option in
     v)
       verbose=true
@@ -48,8 +48,16 @@ while getopts 'vlh:' option; do
       loop=true
       ;;
     h)
-      echo "Usage: -v (verbose) to get thread and board data, use -l to make the program loop indefinitely"
+      echo "Usage:"
+      echo " -v (verbose) to get thread and board data"
+      echo " -l to make the program loop indefinitely"
+      echo " -b to limit comments to a single board"
+      echo "BOARDS:"
+      echo "${boards[@]}"
       exit 1
+      ;;
+    b) 
+      boards=($OPTARG)
       ;;
     *)
       echo "unrecognised argument"
