@@ -66,10 +66,11 @@ while getopts 'vlhb:' option; do
   esac
 done
 
-boardcomment
 
 while $loop
 do
+  boardcomment
+
   if $verbose
   then
     echo "BOARD:$board"
@@ -78,12 +79,16 @@ do
 
   echo -e $cleancomment
 
-  sleep 8  
+  sleep 8
 
-  boardcomment
+  echo -e "\n"
 
-  echo -e "\n\n"
+  printf %${COLUMNS}s |tr " " "-"
+
+  echo -e ""
 done
+
+boardcomment
 
 if $verbose
 then
