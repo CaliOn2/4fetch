@@ -1,3 +1,4 @@
+#!/bin/bash
 
 boards=($(curl -s https://a.4cdn.org/boards.json | awk -f boards.awk))
 
