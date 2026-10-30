@@ -2,27 +2,77 @@
 
 # relies on bash
 
+
+
 boards=($(curl -s https://a.4cdn.org/boards.json | awk -f boards.awk))
 
-board=${boards[$RANDOM % ${#boards[@]}]}
+boardcomment () {
 
-threads=($(curl -s https://a.4cdn.org/$board/threads.json | awk -f threads.awk))
+  board=${boards[$RANDOM % ${#boards[@]}]}
 
-thread=${threads[$RANDOM % ${#threads[@]}]}
+  local threads=($(curl -s https://a.4cdn.org/$board/threads.json | awk -f threads.awk))
 
-oldIFS=$IFS
-IFS="'"
+  thread=${threads[$RANDOM % ${#threads[@]}]}
 
-comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | awk -f comments.awk))
+  oldIFS=$IFS
+  IFS="'"
 
-IFS=$oldIFS
+  local comments=($(curl -s https://a.4cdn.org/$board/thread/$thread.json | awk -f comments.awk))
 
-comment=${comments[$RANDOM % ${#comments[@]}]}
+  IFS=$oldIFS
 
-cleancomment=$(echo $comment | sed -f filter.sed)
+  local comment=${comments[$RANDOM % ${#comments[@]}]}
 
-echo "BOARD:$board"
-echo -e "THREAD:$thread\n"
+  cleancomment=$(echo $comment | sed -f filter.sed)
+  
+}
+
+loop=false
+
+verbose=false
+
+while getopts 'vlh:' option; do
+  case $option in
+    v)
+      verbose=true
+      ;;
+    l)
+      loop=true
+      ;;
+    h)
+      echo "Usage: -v (verbose) to get thread and board data, use -l to make the program loop indefinitely"
+      exit 1
+      ;;
+    *)
+      echo "unrecognised argument"
+      exit 1
+      ;;
+  esac
+done
+
+boardcomment
+
+while $loop
+do
+  if $verbose
+  then
+    echo "BOARD:$board"
+    echo -e "THREAD:$thread\n"
+  fi
+
+  echo -e $cleancomment
+
+  sleep 8  
+
+  boardcomment
+
+  echo -e "\n\n"
+done
+
+if $verbose
+then
+  echo "BOARD:$board"
+  echo -e "THREAD:$thread\n"
+fi
 
 echo -e $cleancomment
-
