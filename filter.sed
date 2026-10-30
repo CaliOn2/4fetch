@@ -2,7 +2,8 @@ s/<br>/\\n/g
 s/&gt;/>/g
 s/&#039;/\'/g
 s/\u2019/\'/g
-s/<small>//g
+s/<small>/(smol)/g
+s/<\/small>/(smol)/g
 s/<b>/*/g
 s/<\\\/b>/*/g
 s/&quot;/"/g
@@ -16,3 +17,4 @@ s/\\'/'/g
 s/<s>/-/g
 s/<\\\/s>/-/g
 s/<wbr>/\\n/g
+
